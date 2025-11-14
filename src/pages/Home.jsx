@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getAllProducts } from '../redux/slices/productSlice'
 
 function Home() {
@@ -12,25 +12,42 @@ function Home() {
 
   useEffect(() => {
     dispatch(getAllProducts());
-  },[])
+  }, [])
 
-  const [products, setProducts] = useState([])
+  const { allProducts, loading, error } = useSelector((state) => state.productReducer)
+  console.log(allProducts);
+
 
   return (
     <>
       <Header />
       <div className='mt-5 container-fluid p-5'>
-        <div className="row pt-5">
-          <div className="col-md-3 my-2">
-            <Card>
-              <Card.Img variant="top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ98ZGI18vEg9Fqc7JNS-Muquo-TOQuyVZPfA&s" />
-              <Card.Body className='text-center'>
-                <Card.Title>Card Title</Card.Title>
-                <Link to={`/products/1/view`} className='btn btn-primary' variant="primary">View more</Link>
-              </Card.Body>
-            </Card>
-          </div>
-        </div>
+        {
+          loading ?
+            <div className='p-5 my-5 text-center'>
+              <img width={'120px'} src="https://www.autopoint.com/wp-content/uploads/2022/07/autopoint-loading-svg.gif" alt="Products loading" />
+              <p className='fw-bold fs-1 mt-2 text-primary'>Loading...</p>
+            </div>
+            :
+            <div className="row pt-5">
+
+              {
+                allProducts?.length > 0 ? allProducts?.map((product) => (
+                  <div key={product.id} className="col-md-3 my-2">
+                    <Card>
+                      <Card.Img variant="top" src={product?.thumbnail} />
+                      <Card.Body className='text-center'>
+                        <Card.Title>{product?.title.slice(0, 18)}</Card.Title>
+                        <Link to={`/products/${product.id}/view`} className='btn btn-primary' variant="primary">View more</Link>
+                      </Card.Body>
+                    </Card>
+                  </div>
+                )) :
+                  <p className='text-center w-full fw-bold fs-1 p-5'>Products not found</p>
+              }
+
+            </div>
+        }
       </div>
       <Footer />
     </>

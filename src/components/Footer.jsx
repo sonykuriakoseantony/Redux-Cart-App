@@ -120,7 +120,7 @@ function Footer() {
               </div>
 
               {/* SOCIAL ICONS */}
-              <div className="d-flex gap-4 mt-4 fs-5">
+              <div className="d-flex justify-content-between gap-4 mt-4 fs-5">
                 <a href="" target="_blank" className='text-light'><FontAwesomeIcon icon={faTwitter} /></a>
                 <a href="" target="_blank" className='text-light'><FontAwesomeIcon icon={faInstagram} /></a>
                 <a href="" target="_blank" className='text-light'><FontAwesomeIcon icon={faFacebook} /></a>
@@ -132,7 +132,7 @@ function Footer() {
           </div>
 
           <div className="text-center mt-4 pt-3 border-top">
-            Copyright © July 2024 Batch, Daily Cart.
+            Copyright © August 2025 Batch, Daily Cart.
             Built with React Redux.
           </div>
         </div>
