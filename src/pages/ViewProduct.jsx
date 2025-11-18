@@ -8,10 +8,10 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToWishList } from '../redux/slices/wishlistSlice'
 import Swal from 'sweetalert2'
+import { addToCart } from '../redux/slices/cartSlice'
 
 function ViewProduct() {
   //get parameter from url
-
   const {id} = useParams();
 
   //state to store product details
@@ -29,7 +29,7 @@ function ViewProduct() {
 
   const dispatch = useDispatch();
   const userWishList = useSelector((state) => state.wishlistReducer);
-  const handleAddToWishList = (product) => {
+  const handleAddToWishList = () => {
     const existingProduct = userWishList.find(item => item.id == product.id);
     if (!existingProduct) {
       dispatch(addToWishList(product));
@@ -42,7 +42,6 @@ function ViewProduct() {
       });
     }
   }
-  
 
   //action discpatch to get single product details
   // the below implementation is just for structure demo
@@ -55,6 +54,17 @@ function ViewProduct() {
   },[id])
   const getProduct = async ()=>{
   }*/
+
+  const userCart = useSelector((state) => state.cartReducer);
+  const handleAddToCart = () => {
+    const existingProduct = userCart.find(item=> item.id==product.id);
+    dispatch(addToCart(product));
+    Swal.fire({
+      title: "Success! ",
+      text: existingProduct?`Product quantity updated in your cart`:'Product added to your cart',
+      icon: "success"
+    });
+  }
 
   return (
     <>
@@ -83,12 +93,12 @@ function ViewProduct() {
 
             {/* BUTTONS */}
             <div className="d-flex gap-3 my-4">
-              <Button variant="primary" onClick={() => handleAddToWishList(product)}>
+              <Button variant="primary" onClick={handleAddToWishList}>
                 <FontAwesomeIcon icon={faHeart} className="me-2" />
                 Add to Wishlist
               </Button>
 
-              <Button variant="success">
+              <Button variant="success" onClick={handleAddToCart}>
                 <FontAwesomeIcon icon={faCartPlus} className="me-2" />
                 Add to Cart
               </Button>

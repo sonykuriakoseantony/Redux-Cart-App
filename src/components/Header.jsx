@@ -1,7 +1,6 @@
 import { faCartPlus, faHeart, faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { use } from 'react'
-import { Badge, Container, Nav, Navbar } from 'react-bootstrap'
+import { Badge,  Nav, Navbar } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -9,6 +8,9 @@ import { Link } from 'react-router-dom'
 function Header() {
     //to get wishlist count from the redux store
     const userWishList = useSelector((state) => state.wishlistReducer);
+
+    //to get items count from cart
+    const userCart = useSelector((state) => state.cartReducer);
 
     return (
         <Navbar expand="lg" className="bg-primary fixed-top">
@@ -20,7 +22,7 @@ function Header() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
                         <Link to="/wishlist" className='text-decoration-none text-light me-4'><FontAwesomeIcon icon={faHeart} className='me-1'/>Wishlist <Badge bg="secondary">{userWishList.length}</Badge></Link>
-                        <Link to="/cart" className='text-decoration-none text-light'><FontAwesomeIcon icon={faCartPlus} className='me-1'/>Cart <Badge bg="secondary">15</Badge></Link>
+                        <Link to="/cart" className='text-decoration-none text-light'><FontAwesomeIcon icon={faCartPlus} className='me-1'/>Cart <Badge bg="secondary">{userCart.length}</Badge></Link>
                     </Nav>
                 </Navbar.Collapse>
             </div>

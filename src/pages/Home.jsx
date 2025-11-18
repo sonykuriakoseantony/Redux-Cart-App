@@ -36,7 +36,7 @@ function Home() {
                       <Card.Img variant="top" src={product?.thumbnail} />
                       <Card.Body className='text-center'>
                         <Card.Title>{product?.title.slice(0, 18)}</Card.Title>
-                        <Link to={`/products/${product.id}/view`} className='btn btn-primary' variant="primary">View more</Link>
+                        <Link to={`/products/${product.id}/view`} className='btn btn-primary' variant="primary">View Product</Link>
                       </Card.Body>
                     </Card>
                   </div>
