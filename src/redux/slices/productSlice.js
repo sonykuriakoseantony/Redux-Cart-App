@@ -4,8 +4,10 @@ import axios from "axios";
 //getAllProducts should be called inside home useeffect using dispatch method
 export const getAllProducts = createAsyncThunk('products/getAllProducts', async () =>{
     const result = await axios.get('https://dummyjson.com/products')
+   
+    // save all products to session storage - data will be kept inside the seeion only
+    sessionStorage.setItem('products', JSON.stringify(result.data.products));
     return result.data.products
-    
 })
 
 const productSlice = createSlice({

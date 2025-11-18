@@ -15,8 +15,6 @@ function Home() {
   }, [])
 
   const { allProducts, loading, error } = useSelector((state) => state.productReducer)
-  console.log(allProducts);
-
 
   return (
     <>
