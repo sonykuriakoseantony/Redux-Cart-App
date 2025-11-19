@@ -1,22 +1,47 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { removeFromCart } from '../redux/slices/cartSlice'
+import { Link, useNavigate } from 'react-router-dom'
+import { decrementCartItem, emptyCart, incrementCartItem, removeFromCart } from '../redux/slices/cartSlice'
+import Swal from 'sweetalert2'
 
 function Cart() {
-  const [quantity,setQuantity] = useState(0)
+  const [totalPrice, setTotalPrice] = useState(0)
   const userCart = useSelector((state) => state.cartReducer);
   const dispatch = useDispatch();
 
-  console.log(userCart);
-
+  useEffect(() => {
+    setTotalPrice(userCart?.reduce((acc, pdt) => acc + pdt.totalPrice, 0.00).toFixed(2))
+  }, [userCart])
 
   const handleChange = (e) => {
     // Handle quantity change
+  }
+
+  const handleDecrementCartItem = (product) => {
+    if (product.quantity > 1) {
+      dispatch(decrementCartItem(product.id))
+      console.log(userCart);
+    }
+    else {
+      console.log(userCart);
+      dispatch(removeFromCart(product))
+    }
+  }
+
+  const navigate = useNavigate()
+
+  const handleCheckout = () => {
+    Swal.fire({
+      title: "Success! ",
+      text: "Thank you for purchasing",
+      icon: "success"
+    });
+    dispatch(emptyCart())
+    navigate('/')
   }
 
   return (
@@ -55,14 +80,14 @@ function Cart() {
                             </td>
                             <td>
                               <div className="d-flex align-items-center">
-                                <button className="btn btn-light border px-2 fw-bold ">-</button>
+                                <button className="btn btn-light border px-2 fw-bold " onClick={() => handleDecrementCartItem(product)}>-</button>
                                 <input type="text" className="form-control text-center mx-2" style={{ width: "40px" }} value={product?.quantity} onChange={handleChange} />
-                                <button className="btn btn-light border px-2 fw-bold ">+</button>
+                                <button className="btn btn-light border px-2 fw-bold " onClick={() => dispatch(incrementCartItem(product?.id))}>+</button>
                               </div>
                             </td>
                             <td>${product?.totalPrice}</td>
                             <td>
-                              <button className="btn btn-light text-danger rounded" onClick={()=>dispatch(removeFromCart(product))}>
+                              <button className="btn btn-light text-danger rounded" onClick={() => dispatch(removeFromCart(product))}>
                                 <FontAwesomeIcon icon={faTrash} />
                               </button>
                             </td>
@@ -74,7 +99,7 @@ function Cart() {
                   </table>
 
                   <div className="d-flex gap-3 mt-4 justify-content-end">
-                    <button className="btn btn-danger px-3 fw-semibold rounded" style={{ fontSize: '14px' }}>EMPTY CART</button>
+                    <button onClick={() => dispatch(emptyCart())} className="btn btn-danger px-3 fw-semibold rounded" style={{ fontSize: '14px' }}>EMPTY CART</button>
                     <Link to={'/'} className="btn btn-primary px-3 fw-semibold rounded" style={{ fontSize: '14px' }}>SHOP MORE</Link>
                   </div>
 
@@ -85,10 +110,10 @@ function Cart() {
                 <div className="p-4 border rounded bg-white">
 
                   <h5 className="fw-bold mb-4 px-2 py-2">
-                    Total Amount : $ {userCart.reduce((acc, item) => acc + item.totalPrice, 0.00).toFixed(2)}
+                    Total Amount : $ {totalPrice}
                   </h5>
 
-                  <button className="btn btn-success w-100 py-2 fs-5 rounded fw-semibold">
+                  <button className="btn btn-success w-100 py-2 fs-5 fw-semibold" onClick={handleCheckout}>
                     CHECK OUT
                   </button>
                 </div>
